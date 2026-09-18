@@ -12,5 +12,6 @@ public class Main {
         System.out.println("For test pull");
         System.out.println("из локальной ветки прямо в нужную ветку!");
         System.out.println("из локальной ветки прямо в нужную ветку! IDE");
+        System.out.println("из локальной ветки прямо в нужную ветку! IDE for video");
     }
 }
