@@ -10,6 +10,6 @@ public class Main {
                 "Создал ветку testBranchPakepko. В ней добавил этот sout. Сейчас сделаю коммит и пуш. " +
                 "Затем отправлю PullRequest Кириллу!");
         System.out.println("For test pull");
-        System.out.println("из локальной ветки прямо в нужную ветку");
+        System.out.println("из локальной ветки прямо в нужную ветку!");
     }
 }
