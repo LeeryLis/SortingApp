@@ -9,5 +9,6 @@ public class Main {
         System.out.println("Меня зовут Сергей. Я форкнул проект из репозитория Кирила. Клонировал себе на комп. " +
                 "Создал ветку testBranchPakepko. В ней добавил этот sout. Сейчас сделаю коммит и пуш. " +
                 "Затем отправлю PullRequest Кириллу!");
+        System.out.println("For test pull");
     }
 }
