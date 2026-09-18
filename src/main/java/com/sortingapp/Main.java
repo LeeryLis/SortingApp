@@ -11,5 +11,6 @@ public class Main {
                 "Затем отправлю PullRequest Кириллу!");
         System.out.println("For test pull");
         System.out.println("из локальной ветки прямо в нужную ветку!");
+        System.out.println("из локальной ветки прямо в нужную ветку! IDE");
     }
 }
