@@ -1,21 +1,53 @@
 package com.sortingapp.model;
 
-//Это тестовый коментарий
-
 public class StudentBuilder {
+
+    //Это билдер класса Student.
+    //Он создаёт объект Student, применяя проверки к его полям.
+    //Переменные, оканчивающиеся на Set, нужны, чтобы убедится, что все поля были заполнены.
+
+
+    private String groupNumber;
+    private double averageScore;
+    private int recordBookNumber;
+
+    private boolean groupNumberSet;
+    private boolean averageScoreSet;
+    private boolean recordBookNumberSet;
+
+
     public StudentBuilder groupNumber(String groupNumber) {
-        throw new UnsupportedOperationException("StudentBuilder.groupNumber not implemented yet");
+
+        if (groupNumber == null || groupNumber.isBlank()) {
+            throw new IllegalArgumentException( "Group number cannot be empty" );
+        }
+        this.groupNumber = groupNumber;
+        this.groupNumberSet = true;
+        return this;
     }
 
     public StudentBuilder averageScore(double averageScore) {
-        throw new UnsupportedOperationException("StudentBuilder.averageScore not implemented yet");
+        if (averageScore < 0 || averageScore > 5) {
+            throw new IllegalArgumentException( "Average score must be between 0 and 5" );
+        }
+        this.averageScore = averageScore;
+        this.averageScoreSet = true;
+        return this;
     }
 
     public StudentBuilder recordBookNumber(int recordBookNumber) {
-        throw new UnsupportedOperationException("StudentBuilder.recordBookNumber not implemented yet");
+        if (recordBookNumber <= 0) {
+            throw new IllegalArgumentException( "Record book number must be positive" );
+        }
+        this.recordBookNumber = recordBookNumber;
+        this.recordBookNumberSet = true;
+        return this;
     }
 
     public Student build() {
-        throw new UnsupportedOperationException("StudentBuilder.build not implemented yet");
+        if (!groupNumberSet || !averageScoreSet || !recordBookNumberSet) {
+            throw new IllegalStateException( "All student parameters must be specified" );
+        }
+        return new Student( groupNumber, averageScore, recordBookNumber );
     }
 }
