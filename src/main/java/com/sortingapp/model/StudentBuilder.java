@@ -1,5 +1,7 @@
 package com.sortingapp.model;
 
+//Это тестовый коментарий
+
 public class StudentBuilder {
     public StudentBuilder groupNumber(String groupNumber) {
         throw new UnsupportedOperationException("StudentBuilder.groupNumber not implemented yet");
