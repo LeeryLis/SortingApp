@@ -1,18 +1,18 @@
 package com.sortingapp;
 
+import com.sortingapp.controller.StudentsController;
 import com.sortingapp.model.Student;
+import com.sortingapp.view.ConsoleView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
-    static void main() {
-        System.out.println("Sorting App");
+    public static void main(String[] args) {
+        List<Student> students = new ArrayList<>();
+        ConsoleView view = new ConsoleView();
 
-        System.out.println("Меня зовут Сергей. Я форкнул проект из репозитория Кирила. Клонировал себе на комп. " +
-                "Создал ветку testBranchPakepko. В ней добавил этот sout. Сейчас сделаю коммит и пуш. " +
-                "Затем отправлю PullRequest Кириллу!");
-        System.out.println("For test pull");
-        System.out.println("из локальной ветки прямо в нужную ветку!");
-        System.out.println("из локальной ветки прямо в нужную ветку! IDE");
-        System.out.println("из локальной ветки прямо в нужную ветку! IDE for video");
-        System.out.println("из локальной ветки прямо в нужную ветку! IDE for video2");
+        StudentsController studentsController = new StudentsController(students, view);
+        studentsController.run();
     }
 }
