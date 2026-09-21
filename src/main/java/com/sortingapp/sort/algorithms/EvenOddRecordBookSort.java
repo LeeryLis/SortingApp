@@ -7,15 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class EvenOddRecordBookSort implements SortStrategy {
-    private final SortStrategy inner;
-
-    public EvenOddRecordBookSort(SortStrategy inner) {
-        this.inner = inner;
-    }
-
-    @Override
-    public void sort(List<Student> students, Comparator<Student> comparator) {
-        /*
+    /*
             Дополнительное задание 1:
             дополнительно к основным сортировкам реализовать эти же алгоритмы
             сортировки таким образом, что объекты классов будут сортироваться
@@ -25,6 +17,25 @@ public class EvenOddRecordBookSort implements SortStrategy {
 
             Поле для сортировки:
             Номер зачётной книжки (recordBookNumber)
-         */
+     */
+    @Override
+    public void sort(List<Student> students, Comparator<Student> comparator) {
+        int len = students.size();
+        for (int i = 0; i < len - 1; i++) {
+            if (isNotEven(students.get(i).getRecordBookNumber())) continue;
+            for (int j = i + 1; j < len; j++) {
+                if (isNotEven(students.get(j).getRecordBookNumber()))
+                    continue;
+                if (comparator.compare(students.get(i), students.get(j)) > 0) {
+                    Student temp = students.get(i);
+                    students.set(i, students.get(j));
+                    students.set(j, temp);
+                }
+            }
+        }
+    }
+
+    private boolean isNotEven(int n) {
+        return n % 2 != 0;
     }
 }
