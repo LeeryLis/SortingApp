@@ -14,18 +14,6 @@ public final class RandomFiller {
     private static final Random RANDOM = new Random();
     private RandomFiller() {}
 
-    private static String getRandomGroupNumber() {
-        return String.valueOf(RANDOM.nextInt(100001));
-    }
-
-    private static double getRandomAverageScore() {
-        return (RANDOM.nextInt(401) + 100) / 100.0;
-    }
-
-    private static int getRandomRecordBookNumber() {
-        return RANDOM.nextInt(100001)+1;
-    }
-
     public static List<Student> generateStudents(int count) {
 
         List<Student> students = new ArrayList<>(count);
@@ -38,5 +26,17 @@ public final class RandomFiller {
         }
 
         return students;
+    }
+
+    private static String getRandomGroupNumber() {
+        return String.valueOf(RANDOM.nextInt(100001));
+    }
+
+    private static double getRandomAverageScore() {
+        return (RANDOM.nextInt(401) + 100) / 100.0;
+    }
+
+    private static int getRandomRecordBookNumber() {
+        return RANDOM.nextInt(100001)+1;
     }
 }
