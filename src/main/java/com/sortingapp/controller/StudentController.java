@@ -81,6 +81,11 @@ public class StudentController {
     }
 
     private void sort() {
+        if(students.isEmpty()) {
+            view.showError("Список пуст — нечего сортировать.");
+            return;
+        }
+
         List<Student> sortedStudents = new ArrayList<>(students);
 
         Comparator<Student> comparator = chooseSortField(view.showFieldMenuAndAsk());
