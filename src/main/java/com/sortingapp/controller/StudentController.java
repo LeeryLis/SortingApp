@@ -87,7 +87,7 @@ public class StudentController {
         SortStrategy sortStrategy = chooseSortStrategy(view.showSortStrategyMenuAndAsk());
 
         sortStrategy.sort(sortedStudents, comparator);
-        view.showStudents(students);
+        view.showStudents(sortedStudents);
     }
 
     private Comparator<Student> chooseSortField(FieldOptions choice) {
