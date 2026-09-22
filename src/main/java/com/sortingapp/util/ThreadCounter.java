@@ -61,7 +61,7 @@ public final class ThreadCounter {
                 total += future.get();
             } catch (InterruptedException | ExecutionException ex) {
                 Thread.currentThread().interrupt();
-                throw new RuntimeException("Ошибка при подсчете ", ex);
+                throw new RuntimeException("Ошибка при подсчете : ", ex);
             }
         }
         executor.shutdown();
