@@ -20,14 +20,14 @@ import java.util.Comparator;
 import java.util.List;
 
 
-public class StudentsController {
+public class StudentController {
 
     private List<Student> students;
     private ConsoleView view;
 
     private boolean running = true;
 
-    public StudentsController(List<Student> students, ConsoleView view) {
+    public StudentController(List<Student> students, ConsoleView view) {
         this.students = students;
         this.view = view;
     }

@@ -1,6 +1,6 @@
 package com.sortingapp;
 
-import com.sortingapp.controller.StudentsController;
+import com.sortingapp.controller.StudentController;
 import com.sortingapp.model.Student;
 import com.sortingapp.view.ConsoleView;
 
@@ -12,7 +12,7 @@ public class Main {
         List<Student> students = new ArrayList<>();
         ConsoleView view = new ConsoleView();
 
-        StudentsController studentsController = new StudentsController(students, view);
-        studentsController.run();
+        StudentController studentController = new StudentController(students, view);
+        studentController.run();
     }
 }
