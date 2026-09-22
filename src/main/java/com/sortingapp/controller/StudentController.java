@@ -65,6 +65,7 @@ public class StudentController {
             view.showStudents(students);
         } catch (Exception e) {
             view.showError("Не удалось прочитать файл: " + e.getMessage());
+            //Это заглушка, тут нужен IOException, который нужно пробросить из FileService.readFromFile()
         }
     }
 

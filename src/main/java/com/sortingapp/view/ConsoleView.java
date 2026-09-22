@@ -24,7 +24,7 @@ public class ConsoleView {
 
         while (true) {
             System.out.print("Ваш выбор: ");
-            String input = scanner.nextLine().trim();
+            String input = readLine();
             try {
                 int code = Integer.parseInt(input);
                 return MenuOptions.fromCode(code);
@@ -46,7 +46,7 @@ public class ConsoleView {
 
         while (true) {
             System.out.print("Ваш выбор: ");
-            String input = scanner.nextLine().trim();
+            String input = readLine();
             try {
                 int code = Integer.parseInt(input);
                 return AlgorithmOptions.fromCode(code);
@@ -68,7 +68,7 @@ public class ConsoleView {
 
         while (true) {
             System.out.print("Ваш выбор: ");
-            String input = scanner.nextLine().trim();
+            String input = readLine();
             try {
                 int code = Integer.parseInt(input);
                 return FieldOptions.fromCode(code);
@@ -82,19 +82,19 @@ public class ConsoleView {
 
     public String askFilePath() {
         System.out.print("Введите путь к файлу: ");
-        return scanner.nextLine().trim();
+        return readLine();
     }
 
     public int askCount() {
         while (true) {
             System.out.print("Сколько студентов создать? ");
-            String input = scanner.nextLine().trim();
+            String input = readLine();
             try {
                 int count = Integer.parseInt(input);
-                if (count > 0) {
+                if (count > 0 && count <= 1000) {
                     return count;
                 }
-                showError("Число должно быть положительным.");
+                showError("Число должно быть в диапазоне 1..1000.");
             } catch (NumberFormatException e) {
                 showError("Введите целое число.");
             }
@@ -105,12 +105,12 @@ public class ConsoleView {
         System.out.println("--- Ввод студента ---");
 
         System.out.print("Номер группы: ");
-        String group = scanner.nextLine().trim();
+        String group = readLine();
 
         double grade;
         while (true) {
             System.out.print("Средняя оценка (0..10): ");
-            String input = scanner.nextLine().trim();
+            String input = readLine();
             try {
                 grade = Double.parseDouble(input.replace(',', '.'));
                 if (grade >= 0 && grade <= 10) {
@@ -125,7 +125,7 @@ public class ConsoleView {
         int recordBook;
         while (true) {
             System.out.print("Номер зачётной книжки: ");
-            String input = scanner.nextLine().trim();
+            String input = readLine();
             try {
                 recordBook = Integer.parseInt(input);
                 if (recordBook >= 1) {
@@ -146,7 +146,7 @@ public class ConsoleView {
 
     public boolean askContinueInput() {
         System.out.print("Добавить ещё одного студента? (y/n): ");
-        String input = scanner.nextLine().trim().toLowerCase();
+        String input = readLine().toLowerCase();
         return input.equals("y") || input.equals("д") || input.equals("yes");
     }
 
@@ -157,16 +157,16 @@ public class ConsoleView {
             return;
         }
 
-        System.out.println("+----------------+----------------+----------------------+");
-        System.out.println("| Группа         | Ср. оценка     | Номер зачётки        |");
-        System.out.println("+----------------+----------------+----------------------+");
+        System.out.println("+------------+----------------+------------------+");
+        System.out.println("| Группа     | Ср. оценка     | Номер зачётки    |");
+        System.out.println("+------------+----------------+------------------+");
         for (Student s : students) {
-            System.out.printf("| %-14s | %-14.2f | %-20d |%n",
+            System.out.printf("| %-10s | %-14.2f | %-16d |%n",
                     s.getGroupNumber(),
                     s.getAverageScore(),
                     s.getRecordBookNumber());
         }
-        System.out.println("+----------------+----------------+----------------------+");
+        System.out.println("+------------+----------------+------------------+");
         System.out.printf("Всего: %d%n", students.size());
     }
 
@@ -180,6 +180,11 @@ public class ConsoleView {
 
     public void showSuccess(String message) {
         System.out.println("[OK] " + message);
+    }
+
+    private String readLine() {
+        String line = scanner.nextLine();
+        return line == null ? "" : line.trim();
     }
 
     public void close() {
