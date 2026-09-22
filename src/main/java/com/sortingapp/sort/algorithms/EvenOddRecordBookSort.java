@@ -5,37 +5,47 @@ import com.sortingapp.sort.SortStrategy;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.ArrayList;
 
 public class EvenOddRecordBookSort implements SortStrategy {
-    /*
-            Дополнительное задание 1:
-            дополнительно к основным сортировкам реализовать эти же алгоритмы
-            сортировки таким образом, что объекты классов будут сортироваться
-            по какому-либо числовому полю: объекты с четными значениями этого поля
-            должны быть отсортированы в натуральном порядке, а с нечетными – оставаться
-            на исходных позициях.
+    private final SortStrategy inner;
 
-            Поле для сортировки:
-            Номер зачётной книжки (recordBookNumber)
+    public EvenOddRecordBookSort(SortStrategy inner) {
+        this.inner = inner;
+    }
+
+    /*
+        Дополнительное задание 1:
+        дополнительно к основным сортировкам реализовать эти же алгоритмы
+        сортировки таким образом, что объекты классов будут сортироваться
+        по какому-либо числовому полю: объекты с четными значениями этого поля
+        должны быть отсортированы в натуральном порядке, а с нечетными – оставаться
+        на исходных позициях.
+
+        Поле для сортировки:
+        Номер зачётной книжки (recordBookNumber)
      */
     @Override
     public void sort(List<Student> students, Comparator<Student> comparator) {
-        int len = students.size();
-        for (int i = 0; i < len - 1; i++) {
-            if (isNotEven(students.get(i).getRecordBookNumber())) continue;
-            for (int j = i + 1; j < len; j++) {
-                if (isNotEven(students.get(j).getRecordBookNumber()))
-                    continue;
-                if (comparator.compare(students.get(i), students.get(j)) > 0) {
-                    Student temp = students.get(i);
-                    students.set(i, students.get(j));
-                    students.set(j, temp);
-                }
+        List<Student> tempStudents = new ArrayList<>();
+        List<Boolean> evenElements = new ArrayList<>();
+        for (Student s : students) {
+            if (s.getRecordBookNumber() % 2 == 0) {
+                tempStudents.add(s);
+                evenElements.add(true);
+            } else {
+                evenElements.add(false);
             }
         }
-    }
 
-    private boolean isNotEven(int n) {
-        return n % 2 != 0;
+        inner.sort(tempStudents, comparator);
+
+        int j = 0;
+        for (int i = 0; i < students.size(); i++) {
+            if (evenElements.get(i) == true) {
+                students.set(i, tempStudents.get(j));
+                j++;
+            }
+        }
     }
 }
