@@ -20,7 +20,6 @@ import java.util.Comparator;
 import java.util.List;
 
 
-
 public class StudentsController {
 
     private List<Student> students;
@@ -88,34 +87,18 @@ public class StudentsController {
     }
 
     private Comparator<Student> chooseSortField(FieldOptions choice) {
-        switch (choice) {
-            case GROUP_NUMBER -> {
-                return new StudentGroupNumberComparator();
-            }
-            case AVERAGE_SCORE -> {
-                return new StudentAverageScoreComparator();
-            }
-            case RECORD_BOOK_NUMBER -> {
-                return new StudentRecordBookComparator();
-            }
-        }
-
-        return null;
+        return switch (choice) {
+            case GROUP_NUMBER -> new StudentGroupNumberComparator();
+            case AVERAGE_SCORE -> new StudentAverageScoreComparator();
+            case RECORD_BOOK_NUMBER -> new StudentRecordBookComparator();
+        };
     }
 
     private SortStrategy chooceSortStrategy(AlgorithmOptions choice) {
-        switch (choice) {
-            case BABBLE_SORT -> {
-                return new BubbleSort();
-            }
-            case MERGE_SORT -> {
-                return new MergeSort();
-            }
-            case QUICK_SORT -> {
-                return new QuickSort();
-            }
-        }
-
-        return null;
+        return switch (choice) {
+            case BABBLE_SORT -> new BubbleSort();
+            case MERGE_SORT -> new MergeSort();
+            case QUICK_SORT -> new QuickSort();
+        };
     }
 }
