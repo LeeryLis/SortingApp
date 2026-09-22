@@ -1,6 +1,5 @@
 package com.sortingapp.util;
 
-import com.sortingapp.model.StudentBuilder;
 import com.sortingapp.model.Student;
 
 import java.util.ArrayList;
@@ -11,11 +10,8 @@ public final class RandomFiller {
 
     //Cоздаёт в формате "чтобы были" через случайный генератор поля студента
     // и добавляет в лист count число студентов через StudentBuilder.
-    //На данный момент имеется проблема формата полей.
-
 
     private static final Random RANDOM = new Random();
-
     private RandomFiller() {}
 
     private static String getRandomGroupNumber() {
@@ -34,13 +30,13 @@ public final class RandomFiller {
 
         List<Student> students = new ArrayList<>(count);
         for(int i =0; i < count; i++) {
-            students.add(new StudentBuilder()
+            students.add(Student.builder()
                     .groupNumber(getRandomGroupNumber())
                     .averageScore(getRandomAverageScore())
                     .recordBookNumber(getRandomRecordBookNumber())
                     .build());
         }
 
-        return List.copyOf(students);
+        return students;
     }
 }
