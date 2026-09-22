@@ -37,8 +37,8 @@ public class StudentsController {
             try {
                 MenuOptions choice = view.showMainMenuAndAsk();
                 handleMenuChoice(choice);
-            } catch (Exception e) {
-                System.out.println("[Ошибка]: " + e.getMessage());
+            } catch (IllegalArgumentException | IllegalStateException e) {
+                view.showError(e.getMessage());
             }
         }
         view.close();
