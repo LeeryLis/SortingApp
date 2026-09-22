@@ -17,12 +17,15 @@ public class QuickSort implements SortStrategy {
         Student pivot = students.get(len / 2);
         List<Student> less = new ArrayList<>();
         List<Student> greater = new ArrayList<>();
+        List<Student> equal = new ArrayList<>();
 
         for (Student student : students) {
-            if (comparator.compare(student, pivot) <= 0) {
+            if (comparator.compare(student, pivot) < 0) {
                 less.add(student);
-            } else {
+            } else if(comparator.compare(student, pivot) > 0) {
                 greater.add(student);
+            }else{
+                equal.add(student);
             }
         }
         sort(less, comparator);
@@ -30,6 +33,7 @@ public class QuickSort implements SortStrategy {
 
         students.clear();
         students.addAll(less);
+        students.addAll(equal);
         students.addAll(greater);
     }
 }
