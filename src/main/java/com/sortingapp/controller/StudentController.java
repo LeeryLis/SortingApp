@@ -23,7 +23,7 @@ import java.util.List;
 public class StudentController {
 
     private List<Student> students;
-    private ConsoleView view;
+    private final ConsoleView view;
 
     private boolean running = true;
 
@@ -83,14 +83,10 @@ public class StudentController {
         List<Student> sortedStudents = List.copyOf(students);
 
         Comparator<Student> comparator = chooseSortField(view.showFieldMenuAndAsk());
-        SortStrategy sortStrategy = chooceSortStrategy(view.showSortStrategyMenuAndAsk());
+        SortStrategy sortStrategy = chooseSortStrategy(view.showSortStrategyMenuAndAsk());
 
-        if (comparator != null && sortStrategy != null) {
-            sortStrategy.sort(sortedStudents, comparator);
-            view.showStudents(students);
-        } else {
-            System.out.println("Сортировка невозможна! Не выбрано поле или способ сортировки!");
-        }
+        sortStrategy.sort(sortedStudents, comparator);
+        view.showStudents(students);
     }
 
     private Comparator<Student> chooseSortField(FieldOptions choice) {
@@ -101,7 +97,7 @@ public class StudentController {
         };
     }
 
-    private SortStrategy chooceSortStrategy(AlgorithmOptions choice) {
+    private SortStrategy chooseSortStrategy(AlgorithmOptions choice) {
         return switch (choice) {
             case BABBLE_SORT -> new BubbleSort();
             case MERGE_SORT -> new MergeSort();
