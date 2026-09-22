@@ -23,7 +23,7 @@ import java.util.List;
 public class StudentsController {
 
     private List<Student> students;
-    ConsoleView view;
+    private ConsoleView view;
 
     private boolean running = true;
 
