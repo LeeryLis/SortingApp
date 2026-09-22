@@ -52,7 +52,7 @@ public class StudentsController {
             case SORT -> sort();
             case SAVE_TO_FILE -> saveToFile();
             case SHOW_ALL -> view.showStudents(students);
-            case EXIT -> running = false;
+            case EXIT -> exit();
         }
     }
 
@@ -107,5 +107,10 @@ public class StudentsController {
             case MERGE_SORT -> new MergeSort();
             case QUICK_SORT -> new QuickSort();
         };
+    }
+
+    private void exit() {
+        view.showMessage("Завершение работы. Пока!");
+        running = false;
     }
 }
