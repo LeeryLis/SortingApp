@@ -57,7 +57,14 @@ public class StudentsController {
     }
 
     private void loadFromFile() {
-        students = FileService.readFromFile(Paths.get(view.askFilePath()));
+        String path = view.askFilePath();
+        try {
+            students = FileService.readFromFile(Paths.get(path));
+            view.showSuccess("Загружено студентов: " + students.size());
+            view.showStudents(students);
+        } catch (Exception e) {
+            view.showError("Не удалось прочитать файл: " + e.getMessage());
+        }
     }
 
     private void manualInput() {
