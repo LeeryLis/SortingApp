@@ -16,6 +16,7 @@ import com.sortingapp.view.FieldOptions;
 import com.sortingapp.view.MenuOptions;
 
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -80,7 +81,7 @@ public class StudentController {
     }
 
     private void sort() {
-        List<Student> sortedStudents = List.copyOf(students);
+        List<Student> sortedStudents = new ArrayList<>(students);
 
         Comparator<Student> comparator = chooseSortField(view.showFieldMenuAndAsk());
         SortStrategy sortStrategy = chooseSortStrategy(view.showSortStrategyMenuAndAsk());
