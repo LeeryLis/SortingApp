@@ -20,15 +20,14 @@ import java.util.Comparator;
 import java.util.List;
 
 
-
-public class StudentsController {
+public class StudentController {
 
     private List<Student> students;
-    ConsoleView view;
+    private final ConsoleView view;
 
     private boolean running = true;
 
-    public StudentsController(List<Student> students, ConsoleView view) {
+    public StudentController(List<Student> students, ConsoleView view) {
         this.students = students;
         this.view = view;
     }
@@ -38,8 +37,8 @@ public class StudentsController {
             try {
                 MenuOptions choice = view.showMainMenuAndAsk();
                 handleMenuChoice(choice);
-            } catch (Exception e) {
-                System.out.println("[Ошибка]: " + e.getMessage());
+            } catch (IllegalArgumentException | IllegalStateException e) {
+                view.showError(e.getMessage());
             }
         }
         view.close();
@@ -53,12 +52,20 @@ public class StudentsController {
             case SORT -> sort();
             case SAVE_TO_FILE -> saveToFile();
             case SHOW_ALL -> view.showStudents(students);
-            case EXIT -> running = false;
+            case EXIT -> exit();
         }
     }
 
     private void loadFromFile() {
-        students = FileService.readFromFile(Paths.get(view.askFilePath()));
+        String path = view.askFilePath();
+        try {
+            students = FileService.readFromFile(Paths.get(path));
+            view.showSuccess("Загружено студентов: " + students.size());
+            view.showStudents(students);
+        } catch (Exception e) {
+            view.showError("Не удалось прочитать файл: " + e.getMessage());
+            //Это заглушка, тут нужен IOException, который нужно пробросить из FileService.readFromFile()
+        }
     }
 
     private void manualInput() {
@@ -74,48 +81,36 @@ public class StudentsController {
     }
 
     private void sort() {
-        List<Student> sortedStudents = List.copyOf(students);
+        if (students.isEmpty()) {
+            view.showError("Список пуст — нечего сортировать.");
+            return;
+        }
 
         Comparator<Student> comparator = chooseSortField(view.showFieldMenuAndAsk());
-        SortStrategy sortStrategy = chooceSortStrategy(view.showSortStrategyMenuAndAsk());
+        SortStrategy sortStrategy = chooseSortStrategy(view.showSortStrategyMenuAndAsk());
 
-        if (comparator != null && sortStrategy != null) {
-            sortStrategy.sort(sortedStudents, comparator);
-            view.showStudents(students);
-        } else {
-            System.out.println("Сортировка невозможна! Не выбрано поле или способ сортировки!");
-        }
+        sortStrategy.sort(students, comparator);
+        view.showStudents(students);
     }
 
     private Comparator<Student> chooseSortField(FieldOptions choice) {
-        switch (choice) {
-            case GROUP_NUMBER -> {
-                return new StudentGroupNumberComparator();
-            }
-            case AVERAGE_SCORE -> {
-                return new StudentAverageScoreComparator();
-            }
-            case RECORD_BOOK_NUMBER -> {
-                return new StudentRecordBookComparator();
-            }
-        }
-
-        return null;
+        return switch (choice) {
+            case GROUP_NUMBER -> new StudentGroupNumberComparator();
+            case AVERAGE_SCORE -> new StudentAverageScoreComparator();
+            case RECORD_BOOK_NUMBER -> new StudentRecordBookComparator();
+        };
     }
 
-    private SortStrategy chooceSortStrategy(AlgorithmOptions choice) {
-        switch (choice) {
-            case BABBLE_SORT -> {
-                return new BubbleSort();
-            }
-            case MERGE_SORT -> {
-                return new MergeSort();
-            }
-            case QUICK_SORT -> {
-                return new QuickSort();
-            }
-        }
+    private SortStrategy chooseSortStrategy(AlgorithmOptions choice) {
+        return switch (choice) {
+            case BABBLE_SORT -> new BubbleSort();
+            case MERGE_SORT -> new MergeSort();
+            case QUICK_SORT -> new QuickSort();
+        };
+    }
 
-        return null;
+    private void exit() {
+        view.showMessage("Завершение работы. Пока!");
+        running = false;
     }
 }
