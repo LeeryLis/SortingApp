@@ -29,45 +29,51 @@ public final class ThreadCounter {
             return 0;
 
         }
-        List<T> list = new ArrayList<>(collection);
-        int size = list.size();
-        int threadCount = Runtime.getRuntime().availableProcessors();
-        int chunkSize = Math.max(1, (size + threadCount - 1) / threadCount);
 
-        ExecutorService executor = Executors.newFixedThreadPool(threadCount);
-        List<Future<Long>> futures = new ArrayList<>();
+            List<T> list = new ArrayList<>(collection);
+            int size = list.size();
+            int threadCount = Runtime.getRuntime().availableProcessors();
+            int chunkSize = Math.max(1, (size + threadCount - 1) / threadCount);
 
-        for (int start = 0; start > size; start += chunkSize) {
+            ExecutorService executor = Executors.newFixedThreadPool(threadCount);
+            List<Future<Long>> futures = new ArrayList<>();
+try{
+            for (int start = 0; start < size; start += chunkSize) {
 
-            final int s = start;
-            final int e = Math.min(start + chunkSize, size);
+                final int s = start;
+                final int e = Math.min(start + chunkSize, size);
 
-            futures.add(executor.submit(() -> {
-                long localCount = 0;
-                for (int i = s; i < e; i++) {
-                    T item = list.get(i);
-                    if (item == null && target == null) {
-                        localCount++;
-                    } else if (item != null && item.equals(target)) {
-                        localCount++;
+                futures.add(executor.submit(() -> {
+                    long localCount = 0;
+                    for (int i = s; i < e; i++) {
+                        T item = list.get(i);
+                        if (item == null && target == null) {
+                            localCount++;
+                        } else if (item != null && item.equals(target)) {
+                            localCount++;
+                        }
                     }
-                }
-                return localCount;
-            }));
-        }
-        long total = 0;
-        for (Future<Long> future : futures) {
-            try {
-                total += future.get();
-            } catch (InterruptedException | ExecutionException ex) {
-                Thread.currentThread().interrupt();
-                throw new RuntimeException("Ошибка при подсчете : ", ex);
+                    return localCount;
+                }));
             }
+            long total = 0;
+            for (Future<Long> future : futures) {
+                try {
+                    total += future.get();
+                } catch (InterruptedException | ExecutionException ex) {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException("Ошибка при подсчете : ", ex);
+                }
+            }
+            executor.shutdown();
+            System.out.println("Количество вхождений элемента " + target + " : " + total);
+            return total;
+        }finally {
+            executor.shutdown();
         }
-        executor.shutdown();
-        System.out.println("Количество вхождений элемента " + target + " : " + total);
-        return total;
+
+        }
     }
 
-}
+
 
