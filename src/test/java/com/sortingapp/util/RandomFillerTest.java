@@ -1,7 +1,6 @@
 package com.sortingapp.util;
 
 import com.sortingapp.model.Student;
-import com.sortingapp.util.RandomFiller;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -9,7 +8,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class RandomFilerTest {
+public class RandomFillerTest {
 
     //Этот тест проверяет результат RandomFiler на кол-во студентов
     //и их поля на диапазон рандомайзера
