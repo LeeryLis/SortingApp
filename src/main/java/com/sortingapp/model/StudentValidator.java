@@ -4,14 +4,14 @@ public final class StudentValidator {
     private StudentValidator() {}
 
     public static boolean isValidGroupNumber(String g) {
-        return true;
+        return g != null && !g.isEmpty();
     }
 
     public static boolean isValidAverageScore(double s) {
-        return true;
+        return s >= StudentConstraints.AVERAGE_SCORE_MIN && s <= StudentConstraints.AVERAGE_SCORE_MAX;
     }
 
     public static boolean isValidRecordBookNumber(int n) {
-        return true;
+        return n >= StudentConstraints.RECORD_BOOK_NUMBER_MIN && n <= StudentConstraints.RECORD_BOOK_NUMBER_MAX;
     }
 }
