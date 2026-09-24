@@ -4,7 +4,7 @@ public final class StudentValidator {
     private StudentValidator() {}
 
     public static boolean isValidGroupNumber(String g) {
-        return g != null && !g.isEmpty();
+        return g != null && !g.isBlank();
     }
 
     public static boolean isValidAverageScore(double s) {
