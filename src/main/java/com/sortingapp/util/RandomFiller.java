@@ -33,7 +33,7 @@ public final class RandomFiller {
     }
 
     private static double getRandomAverageScore() {
-        return (RANDOM.nextInt(401) + 100) / 100.0;
+        return (RANDOM.nextInt(401) + 100) / 200.0;
     }
 
     private static int getRandomRecordBookNumber() {

@@ -22,7 +22,7 @@ public class StudentBuilder {
 
     public StudentBuilder groupNumber(String groupNumber) {
         if (groupNumber == null || groupNumber.isBlank()) {
-            throw new IllegalArgumentException( "Group number cannot be empty" );
+            throw new IllegalArgumentException( "Group number cannot be empty or null" );
         }
         this.groupNumber = groupNumber;
         this.groupNumberSet = true;

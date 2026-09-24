@@ -1,4 +1,4 @@
-package util;
+package com.sortingapp.util;
 
 import com.sortingapp.model.Student;
 import com.sortingapp.util.RandomFiller;
