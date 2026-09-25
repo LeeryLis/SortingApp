@@ -4,8 +4,10 @@ import com.sortingapp.model.Student;
 import com.sortingapp.model.comparator.StudentAverageScoreComparator;
 import com.sortingapp.model.comparator.StudentGroupNumberComparator;
 import com.sortingapp.model.comparator.StudentRecordBookComparator;
+import com.sortingapp.sort.SortContext;
 import com.sortingapp.sort.SortStrategy;
 import com.sortingapp.sort.algorithms.BubbleSort;
+import com.sortingapp.sort.algorithms.EvenOddRecordBookSort;
 import com.sortingapp.sort.algorithms.MergeSort;
 import com.sortingapp.sort.algorithms.QuickSort;
 import com.sortingapp.view.AlgorithmOptions;
@@ -14,19 +16,16 @@ import com.sortingapp.view.FieldOptions;
 import java.util.Comparator;
 import java.util.List;
 
-public class SortController {
-    SortStrategy sortStrategy;
+public class SortService {
 
-    private void setStrategy(AlgorithmOptions algorithm) {
-        this.sortStrategy = toStrategy(algorithm);
-    }
-
-    public void sort(List<Student> students, FieldOptions field, AlgorithmOptions algorithm) {
-
-        setStrategy(algorithm);
+    public void sort(List<Student> students, FieldOptions field, AlgorithmOptions algorithm, boolean evenOnly) {
+        SortContext sortContext = new SortContext();
         Comparator<Student> comparator = toComparator(field);
+        SortStrategy base = toStrategy(algorithm);
+        SortStrategy strategy = (evenOnly) ? new EvenOddRecordBookSort(base) : base;
 
-        sortStrategy.sort(students, comparator);
+        sortContext.setStrategy(strategy);
+        sortContext.sort(students, comparator);
     }
 
     private Comparator<Student> toComparator(FieldOptions choice) {

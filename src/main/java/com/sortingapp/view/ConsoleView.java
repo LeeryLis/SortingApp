@@ -144,8 +144,9 @@ public class ConsoleView {
                 .build();
     }
 
-    public boolean askContinueInput() {
-        System.out.print("Добавить ещё одного студента? (y/n): ");
+    public boolean confirmAction(String message) {
+        showMessage(message);
+        System.out.print("(y/n): ");
         String input = readLine().toLowerCase();
         return input.equals("y") || input.equals("д") || input.equals("yes");
     }

@@ -16,7 +16,7 @@ public class StudentController {
 
     private List<Student> students;
     private final ConsoleView view;
-    SortController sorter;
+    private final SortService sortService = new SortService();
 
     private boolean running = true;
 
@@ -74,7 +74,8 @@ public class StudentController {
     }
 
     private void sort() {
-        if (students == null || students.isEmpty()) {
+        boolean evenOnly = false;
+        if (students == null || students.isEmpty() || students.size() < 2) {
             view.showError("Список пуст — нечего сортировать.");
             return;
         }
@@ -82,11 +83,11 @@ public class StudentController {
         FieldOptions field = view.showFieldMenuAndAsk();
         AlgorithmOptions algorithm = view.showSortStrategyMenuAndAsk();
 
-        if(sorter == null) {
-            sorter = new SortController();
+        if(field == FieldOptions.RECORD_BOOK_NUMBER) {
+            evenOnly = view.confirmAction("Применить особый способ сортировки только чётных значений?");
         }
 
-        sorter.sort(students, field, algorithm);
+        sortService.sort(students, field, algorithm, evenOnly);
         view.showStudents(students);
     }
 
