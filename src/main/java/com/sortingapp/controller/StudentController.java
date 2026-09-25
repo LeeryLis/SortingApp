@@ -83,7 +83,7 @@ public class StudentController {
         FieldOptions field = view.showFieldMenuAndAsk();
         AlgorithmOptions algorithm = view.showSortStrategyMenuAndAsk();
 
-        if(field == FieldOptions.RECORD_BOOK_NUMBER) {
+        if (field == FieldOptions.RECORD_BOOK_NUMBER) {
             evenOnly = view.confirmAction("Применить особый способ сортировки только чётных значений?");
         }
 

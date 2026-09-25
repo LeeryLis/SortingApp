@@ -25,6 +25,11 @@ public class SortService {
         SortStrategy strategy = (evenOnly) ? new EvenOddRecordBookSort(base) : base;
 
         sortContext.setStrategy(strategy);
+
+        if (sortContext.getStrategy() == null) {
+            throw new IllegalArgumentException("Стратегия не может быть null");
+        }
+
         sortContext.sort(students, comparator);
     }
 
