@@ -2,13 +2,7 @@ package com.sortingapp.controller;
 
 import com.sortingapp.io.FileService;
 import com.sortingapp.model.Student;
-import com.sortingapp.model.comparator.StudentAverageScoreComparator;
-import com.sortingapp.model.comparator.StudentGroupNumberComparator;
-import com.sortingapp.model.comparator.StudentRecordBookComparator;
-import com.sortingapp.sort.SortStrategy;
-import com.sortingapp.sort.algorithms.BubbleSort;
-import com.sortingapp.sort.algorithms.MergeSort;
-import com.sortingapp.sort.algorithms.QuickSort;
+import com.sortingapp.sort.SortService;
 import com.sortingapp.util.RandomFiller;
 import com.sortingapp.view.AlgorithmOptions;
 import com.sortingapp.view.ConsoleView;
@@ -16,7 +10,6 @@ import com.sortingapp.view.FieldOptions;
 import com.sortingapp.view.MenuOptions;
 
 import java.nio.file.Paths;
-import java.util.Comparator;
 import java.util.List;
 
 
@@ -24,6 +17,7 @@ public class StudentController {
 
     private List<Student> students;
     private final ConsoleView view;
+    private final SortService sortService = new SortService();
 
     private boolean running = true;
 
@@ -81,32 +75,21 @@ public class StudentController {
     }
 
     private void sort() {
-        if (students.isEmpty()) {
+        boolean evenOnly = false;
+        if (students == null || students.isEmpty() || students.size() < 2) {
             view.showError("Список пуст — нечего сортировать.");
             return;
         }
 
-        Comparator<Student> comparator = chooseSortField(view.showFieldMenuAndAsk());
-        SortStrategy sortStrategy = chooseSortStrategy(view.showSortStrategyMenuAndAsk());
+        FieldOptions field = view.showFieldMenuAndAsk();
+        AlgorithmOptions algorithm = view.showSortStrategyMenuAndAsk();
 
-        sortStrategy.sort(students, comparator);
+        if (field == FieldOptions.RECORD_BOOK_NUMBER) {
+            evenOnly = view.confirmAction("Применить особый способ сортировки только чётных значений?");
+        }
+
+        sortService.sort(students, field, algorithm, evenOnly);
         view.showStudents(students);
-    }
-
-    private Comparator<Student> chooseSortField(FieldOptions choice) {
-        return switch (choice) {
-            case GROUP_NUMBER -> new StudentGroupNumberComparator();
-            case AVERAGE_SCORE -> new StudentAverageScoreComparator();
-            case RECORD_BOOK_NUMBER -> new StudentRecordBookComparator();
-        };
-    }
-
-    private SortStrategy chooseSortStrategy(AlgorithmOptions choice) {
-        return switch (choice) {
-            case BABBLE_SORT -> new BubbleSort();
-            case MERGE_SORT -> new MergeSort();
-            case QUICK_SORT -> new QuickSort();
-        };
     }
 
     private void exit() {

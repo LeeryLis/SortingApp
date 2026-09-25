@@ -1,7 +1,7 @@
 package com.sortingapp.view;
 
 public enum AlgorithmOptions {
-    BABBLE_SORT(1, "Метод сортировки \"BabbleSort\""),
+    BUBBLE_SORT(1, "Метод сортировки \"BubbleSort\""),
     MERGE_SORT(2, "Метод сортировки \"MergeSort\""),
     QUICK_SORT(3, "Метод сортировки \"QuickSort\"");
 
