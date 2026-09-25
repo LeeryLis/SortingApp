@@ -1,6 +1,7 @@
 package com.sortingapp.util;
 
 import com.sortingapp.model.Student;
+import com.sortingapp.model.StudentValidator;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -23,14 +24,13 @@ public class RandomFillerTest {
             String groupNumber = student.getGroupNumber();
             assertTrue(groupNumber.matches("\\d+"));
             int intGroupNumber = Integer.parseInt(groupNumber);
+            assertTrue(StudentValidator.isValidGroupNumber(groupNumber));
             assertTrue(intGroupNumber >= 0);
-            assertTrue(intGroupNumber <= 100000);
+            assertTrue(intGroupNumber <= 99999);
 
-            assertTrue(student.getAverageScore() >= 1.0);
-            assertTrue(student.getAverageScore() <= 5.0);
+            assertTrue(StudentValidator.isValidAverageScore(student.getAverageScore()));
 
-            assertTrue(student.getRecordBookNumber() >= 1);
-            assertTrue(student.getRecordBookNumber() <= 100001);
+            assertTrue(StudentValidator.isValidRecordBookNumber(student.getRecordBookNumber()));
         }
     }
 }
