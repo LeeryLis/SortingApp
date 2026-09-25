@@ -2,6 +2,7 @@ package com.sortingapp.controller;
 
 import com.sortingapp.io.FileService;
 import com.sortingapp.model.Student;
+import com.sortingapp.sort.SortService;
 import com.sortingapp.util.RandomFiller;
 import com.sortingapp.view.AlgorithmOptions;
 import com.sortingapp.view.ConsoleView;

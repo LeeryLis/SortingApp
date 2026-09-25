@@ -1,11 +1,9 @@
-package com.sortingapp.controller;
+package com.sortingapp.sort;
 
 import com.sortingapp.model.Student;
 import com.sortingapp.model.comparator.StudentAverageScoreComparator;
 import com.sortingapp.model.comparator.StudentGroupNumberComparator;
 import com.sortingapp.model.comparator.StudentRecordBookComparator;
-import com.sortingapp.sort.SortContext;
-import com.sortingapp.sort.SortStrategy;
 import com.sortingapp.sort.algorithms.BubbleSort;
 import com.sortingapp.sort.algorithms.EvenOddRecordBookSort;
 import com.sortingapp.sort.algorithms.MergeSort;
