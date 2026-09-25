@@ -103,7 +103,7 @@ public class StudentController {
 
     private SortStrategy chooseSortStrategy(AlgorithmOptions choice) {
         return switch (choice) {
-            case BABBLE_SORT -> new BubbleSort();
+            case BUBBLE_SORT -> new BubbleSort();
             case MERGE_SORT -> new MergeSort();
             case QUICK_SORT -> new QuickSort();
         };
