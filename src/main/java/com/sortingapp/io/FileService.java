@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
@@ -22,9 +23,7 @@ public final class FileService {
     private FileService() {}
 
     public static List<Student> readFromFile(String rawPath) {
-        requireValidPath(rawPath);
-
-        Path path = Path.of(rawPath);
+        Path path = toValidPath(rawPath);
         if (!Files.exists(path)) {
             return List.of();
         }
@@ -53,13 +52,12 @@ public final class FileService {
     }
 
     public static void appendText(String text, String rawPath) {
-        requireValidPath(rawPath);
+        Path path = toValidPath(rawPath);
 
         if (text == null || text.isEmpty()) {
             return;
         }
 
-        Path path = Path.of(rawPath);
         try {
             Path parent = path.getParent();
             if (parent != null) {
@@ -77,9 +75,14 @@ public final class FileService {
         }
     }
 
-    private static void requireValidPath(String rawPath) {
+    private static Path toValidPath(String rawPath) {
         if (rawPath == null || rawPath.isBlank()) {
             throw new IllegalArgumentException("Path must not be null or blank");
+        }
+        try {
+            return Path.of(rawPath).normalize();
+        } catch (InvalidPathException e) {
+            throw new IllegalArgumentException("Invalid path: " + rawPath, e);
         }
     }
 
