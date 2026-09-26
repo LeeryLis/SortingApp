@@ -12,6 +12,7 @@ import com.sortingapp.view.FieldOptions;
 import com.sortingapp.view.MenuOptions;
 
 import java.io.FileNotFoundException;
+import java.io.UncheckedIOException;
 
 
 public class StudentController {
@@ -73,7 +74,11 @@ public class StudentController {
     }
 
     private void saveToFile() {
-        System.out.println("saveToFile");
+        try {
+            FileService.appendStudents(students, view.askString("Введите имя файла: "));
+        } catch (UncheckedIOException e) {
+            view.showError(e.getMessage());
+        }
     }
 
     private void sort() {
