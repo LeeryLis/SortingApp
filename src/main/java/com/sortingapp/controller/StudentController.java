@@ -9,7 +9,6 @@ import com.sortingapp.view.ConsoleView;
 import com.sortingapp.view.FieldOptions;
 import com.sortingapp.view.MenuOptions;
 
-import java.nio.file.Paths;
 import java.util.List;
 
 
@@ -53,7 +52,7 @@ public class StudentController {
     private void loadFromFile() {
         String path = view.askFilePath();
         try {
-            students = FileService.readFromFile(Paths.get(path));
+            students = FileService.readFromFile(path);
             view.showSuccess("Загружено студентов: " + students.size());
             view.showStudents(students);
         } catch (Exception e) {
