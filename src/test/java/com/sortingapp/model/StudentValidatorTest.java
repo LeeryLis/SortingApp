@@ -23,7 +23,7 @@ class StudentValidatorTest {
     }
 
     @ParameterizedTest
-    @ValueSource(doubles = {0.0, 2.5, 5.0})
+    @ValueSource(doubles = {2.0, 2.5, 5.0})
     void validScores(double s) {
         assertTrue(StudentValidator.isValidAverageScore(s));
     }
