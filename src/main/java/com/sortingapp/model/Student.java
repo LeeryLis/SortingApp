@@ -13,6 +13,10 @@ public final class Student {
         this.recordBookNumber = recordBookNumber;
     }
 
+    public static StudentBuilder builder() {
+        return new StudentBuilder();
+    }
+
     public String getGroupNumber() { return groupNumber; }
     public double getAverageScore() { return averageScore; }
     public int getRecordBookNumber() { return recordBookNumber; }
