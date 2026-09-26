@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 
 public final class RandomFiller {
 
-    //Cоздаёт в формате StudentValidator через случайный генератор поля студента
+    //Создаёт в формате StudentValidator через случайный генератор поля студента
     // и возвращает список из count числа студентов через StudentBuilder.
 
     private RandomFiller() {}
