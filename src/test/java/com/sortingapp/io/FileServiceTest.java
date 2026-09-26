@@ -7,6 +7,7 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
@@ -39,7 +40,7 @@ class FileServiceTest {
     }
 
     @Test
-    void readsSingleStudent() {
+    void readsSingleStudent() throws FileNotFoundException {
         Path file = write("one.csv", "ИУ7-32Б;4.5;123456\n");
 
         List<Student> result = FileService.readFromFile(file.toString());
@@ -49,7 +50,7 @@ class FileServiceTest {
     }
 
     @Test
-    void readsMultipleStudents()  {
+    void readsMultipleStudents() throws FileNotFoundException {
         Path file = write("many.csv", String.join("\n",
                 "ИУ7-32Б;4.5;123456",
                 "ИУ7-31Б;3.8;100000",
@@ -65,7 +66,7 @@ class FileServiceTest {
     }
 
     @Test
-    void skipsEmptyAndBlankLines()  {
+    void skipsEmptyAndBlankLines() throws FileNotFoundException {
         Path file = write("blank.csv", String.join("\n",
                 "ИУ7-32Б;4.5;123456",
                 "",
@@ -79,7 +80,7 @@ class FileServiceTest {
     }
 
     @Test
-    void trimsWhitespaceAroundFields()  {
+    void trimsWhitespaceAroundFields() throws FileNotFoundException {
         Path file = write("spaces.csv", "  ИУ7-32Б ; 4.5 ; 123456 \n");
 
         List<Student> result = FileService.readFromFile(file.toString());
@@ -89,12 +90,11 @@ class FileServiceTest {
     }
 
     @Test
-    void returnsEmptyListWhenFileDoesNotExist() {
+    void throwsWhenFileDoesNotExist() {
         Path missing = tempDir.resolve("missing.csv");
 
-        List<Student> result = FileService.readFromFile(missing.toString());
-
-        assertTrue(result.isEmpty());
+        assertThrows(FileNotFoundException.class,
+                () -> FileService.readFromFile(missing.toString()));
     }
 
     @Test
@@ -289,7 +289,7 @@ class FileServiceTest {
     // round-trip
 
     @Test
-    void roundTripPreservesStudents() {
+    void roundTripPreservesStudents() throws FileNotFoundException {
         Path file = tempDir.resolve("round.csv");
         List<Student> original = List.of(
                 student("ИУ7-32Б", 4.5, 123456),

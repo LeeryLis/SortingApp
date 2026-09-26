@@ -4,6 +4,7 @@ import com.sortingapp.model.Student;
 import com.sortingapp.model.StudentBuilder;
 import com.sortingapp.model.StudentValidator;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
@@ -22,10 +23,10 @@ public final class FileService {
 
     private FileService() {}
 
-    public static List<Student> readFromFile(String rawPath) {
+    public static List<Student> readFromFile(String rawPath) throws FileNotFoundException {
         Path path = toValidPath(rawPath);
         if (!Files.exists(path)) {
-            return List.of();
+            throw new FileNotFoundException("File not found: " + path);
         }
         if (!Files.isRegularFile(path)) {
             throw new FileFormatException("Not a regular file: " + rawPath);
