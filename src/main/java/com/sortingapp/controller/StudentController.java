@@ -2,6 +2,7 @@ package com.sortingapp.controller;
 
 import com.sortingapp.collection.StudentList;
 import com.sortingapp.io.ConsoleService;
+import com.sortingapp.io.FileFormatException;
 import com.sortingapp.io.FileService;
 import com.sortingapp.sort.SortService;
 import com.sortingapp.util.RandomFiller;
@@ -58,6 +59,8 @@ public class StudentController {
             view.showStudents(students);
         } catch (FileNotFoundException e) {
             view.showError("Не удалось прочитать файл: " + e.getMessage());
+        } catch (FileFormatException e) {
+            view.showError("Неверный формат: " + e.getMessage());
         }
     }
 
