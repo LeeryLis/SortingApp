@@ -21,7 +21,7 @@ public final class ThreadCounter {
     Количество потоков определяется по числу доступных ядер процессор.
 
      @param collection коллекция для поиска
-     @param target искомый элемент (N)
+     @param target искомый элемент (N);
      @return количество вхождений
 
      */
