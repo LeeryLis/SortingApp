@@ -14,9 +14,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ThreadCounterTest {
 
-    private List<Integer> groups; // Список групп
-    private List<Double> scores; // Список средних баллов
-    private List<Integer> recordBooks; // Список номеров зачетных книжек
+    private List<Integer> groups;
+    private List<Double> scores;
+    private List<Integer> recordBooks;
 
     @BeforeEach
     void setUp() {
@@ -43,14 +43,14 @@ class ThreadCounterTest {
     @Test
     void testCountOccurrencesByRecordBook() {
         int targetRecordBook = 123456;
-        long count = ThreadCounter.countOccurences(recordBooks, targetRecordBook); // Метод, который будет принимать только номера зачетных книжек
+        long count = ThreadCounter.countOccurences(recordBooks, targetRecordBook);
         assertEquals(2, count, "Количество вхождений зачетной книжки 123456 должно быть 2");
     }
 
     @Test
     void testCountOccurrencesByGroup() {
         int targetGroup = 732;
-        long count = ThreadCounter.countOccurences(groups, targetGroup); // Метод, который будет принимать только группы
+        long count = ThreadCounter.countOccurences(groups, targetGroup);
         assertEquals(3, count, "Количество студентов в группе 732 должно быть 3");
     }
 
@@ -63,14 +63,14 @@ class ThreadCounterTest {
 
     @Test
     void testCountOccurrencesByNullValue() {
-        long count = ThreadCounter.countOccurences(scores, null); // Проверяем на null
+        long count = ThreadCounter.countOccurences(scores, null);
         assertEquals(0, count, "Количество вхождений null должно быть 0"); // Ожидаем 0
     }
 
     @Test
     void testCountOccurrencesInEmptyCollection() {
-        List<Integer> emptyList = Collections.emptyList(); // Пустой список зачетных книжек
-        long count = ThreadCounter.countOccurences(emptyList, 123456); // Сравниваем с несуществующим номером
-        assertEquals(0, count, "Количество вхождений в пустой коллекции должно быть 0"); // Ожидаем 0
+        List<Integer> emptyList = Collections.emptyList();
+        long count = ThreadCounter.countOccurences(emptyList, 123456);
+        assertEquals(0, count, "Количество вхождений в пустой коллекции должно быть 0");
     }
 }
