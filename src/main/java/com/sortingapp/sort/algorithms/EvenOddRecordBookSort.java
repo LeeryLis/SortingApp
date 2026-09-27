@@ -1,5 +1,6 @@
 package com.sortingapp.sort.algorithms;
 
+import com.sortingapp.collection.StudentList;
 import com.sortingapp.model.Student;
 import com.sortingapp.sort.SortStrategy;
 
@@ -26,8 +27,8 @@ public class EvenOddRecordBookSort implements SortStrategy {
         Номер зачётной книжки (recordBookNumber)
      */
     @Override
-    public void sort(List<Student> students, Comparator<Student> comparator) {
-        List<Student> tempStudents = new ArrayList<>();
+    public void sort(StudentList students, Comparator<Student> comparator) {
+        StudentList tempStudents = new StudentList();
         List<Boolean> evenElements = new ArrayList<>();
         for (Student s : students) {
             if (s.getRecordBookNumber() % 2 == 0) {

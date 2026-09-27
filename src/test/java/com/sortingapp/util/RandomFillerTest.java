@@ -1,9 +1,9 @@
 package com.sortingapp.util;
 
+import com.sortingapp.collection.StudentList;
 import com.sortingapp.model.Student;
 import com.sortingapp.model.StudentValidator;
 import org.junit.jupiter.api.Test;
-import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -14,7 +14,7 @@ public class RandomFillerTest {
 
     @Test
     public void generateStudentsTest(){
-        List<Student> students = RandomFiller.generateStudents(1000);
+        StudentList students = RandomFiller.generateStudents(1000);
 
         assertEquals(1000,students.size());
 

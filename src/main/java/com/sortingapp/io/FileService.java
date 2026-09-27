@@ -1,5 +1,6 @@
 package com.sortingapp.io;
 
+import com.sortingapp.collection.StudentList;
 import com.sortingapp.model.Student;
 import com.sortingapp.model.StudentBuilder;
 import com.sortingapp.model.StudentValidator;
@@ -23,7 +24,7 @@ public final class FileService {
 
     private FileService() {}
 
-    public static List<Student> readFromFile(String rawPath) throws FileNotFoundException {
+    public static StudentList readFromFile(String rawPath) throws FileNotFoundException {
         Path path = toValidPath(rawPath);
         if (!Files.exists(path)) {
             throw new FileNotFoundException("File not found: " + path);
@@ -40,7 +41,7 @@ public final class FileService {
         }
     }
 
-    public static void appendStudents(List<Student> students, String rawPath) {
+    public static void appendStudents(StudentList students, String rawPath) {
         if (students == null || students.isEmpty()) {
             return;
         }
@@ -87,11 +88,11 @@ public final class FileService {
         }
     }
 
-    private static List<Student> parseAll(List<String> rawLines) {
+    private static StudentList parseAll(List<String> rawLines) {
         return IntStream.range(0, rawLines.size())
                 .filter(i -> !rawLines.get(i).isBlank())
                 .mapToObj(i -> parseLine(rawLines.get(i), i + 1))
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(StudentList::new));
     }
 
     private static Student parseLine(String line, int lineNumber) {

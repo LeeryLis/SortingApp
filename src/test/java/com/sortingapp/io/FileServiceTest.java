@@ -1,5 +1,6 @@
 package com.sortingapp.io;
 
+import com.sortingapp.collection.StudentList;
 import com.sortingapp.model.Student;
 import com.sortingapp.model.StudentBuilder;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,7 +45,7 @@ class FileServiceTest {
     void readsSingleStudent() throws FileNotFoundException {
         Path file = write("one.csv", "ИУ7-32Б;4.5;123456\n");
 
-        List<Student> result = FileService.readFromFile(file.toString());
+        StudentList result = FileService.readFromFile(file.toString());
 
         assertEquals(1, result.size());
         assertEquals(student("ИУ7-32Б", 4.5, 123456), result.getFirst());
@@ -57,7 +59,7 @@ class FileServiceTest {
                 "ИУ7-33Б;5.0;999999"
         ));
 
-        List<Student> result = FileService.readFromFile(file.toString());
+        StudentList result = FileService.readFromFile(file.toString());
 
         assertEquals(3, result.size());
         assertEquals(student("ИУ7-32Б", 4.5, 123456), result.get(0));
@@ -74,7 +76,7 @@ class FileServiceTest {
                 "ИУ7-31Б;3.8;100000"
         ));
 
-        List<Student> result = FileService.readFromFile(file.toString());
+        StudentList result = FileService.readFromFile(file.toString());
 
         assertEquals(2, result.size());
     }
@@ -83,7 +85,7 @@ class FileServiceTest {
     void trimsWhitespaceAroundFields() throws FileNotFoundException {
         Path file = write("spaces.csv", "  ИУ7-32Б ; 4.5 ; 123456 \n");
 
-        List<Student> result = FileService.readFromFile(file.toString());
+        StudentList result = FileService.readFromFile(file.toString());
 
         assertEquals(1, result.size());
         assertEquals(student("ИУ7-32Б", 4.5, 123456), result.getFirst());
@@ -180,10 +182,10 @@ class FileServiceTest {
     void appendStudentsCreatesFileIfMissing() throws IOException {
         Path file = tempDir.resolve("new.csv");
 
-        FileService.appendStudents(List.of(
+        FileService.appendStudents(new StudentList(Arrays.asList(
                 student("ИУ7-32Б", 4.5, 123456),
                 student("ИУ7-31Б", 3.8, 100000)
-        ), file.toString());
+        )), file.toString());
 
         List<String> lines = Files.readAllLines(file, StandardCharsets.UTF_8);
         assertEquals(2, lines.size());
@@ -195,9 +197,9 @@ class FileServiceTest {
     void appendStudentsAppendsToExistingFile() throws IOException {
         Path file = write("existing.csv", "ИУ7-32Б;4.5;123456\n");
 
-        FileService.appendStudents(List.of(
+        FileService.appendStudents(new StudentList(Arrays.asList(
                 student("ИУ7-31Б", 3.8, 100000)
-        ), file.toString());
+        )), file.toString());
 
         List<String> lines = Files.readAllLines(file, StandardCharsets.UTF_8);
         assertEquals(2, lines.size());
@@ -209,7 +211,7 @@ class FileServiceTest {
     void appendStudentsDoesNothingForEmptyList() throws IOException {
         Path file = write("existing.csv", "ИУ7-32Б;4.5;123456\n");
 
-        FileService.appendStudents(List.of(), file.toString());
+        FileService.appendStudents(new StudentList(), file.toString());
 
         List<String> lines = Files.readAllLines(file, StandardCharsets.UTF_8);
         assertEquals(1, lines.size());
@@ -229,9 +231,9 @@ class FileServiceTest {
     void appendStudentsCreatesParentDirectories() {
         Path file = tempDir.resolve("nested/dir/students.csv");
 
-        FileService.appendStudents(List.of(
+        FileService.appendStudents(new StudentList(Arrays.asList(
                 student("ИУ7-32Б", 4.5, 123456)
-        ), file.toString());
+        )), file.toString());
 
         assertTrue(Files.exists(file));
     }
@@ -291,14 +293,14 @@ class FileServiceTest {
     @Test
     void roundTripPreservesStudents() throws FileNotFoundException {
         Path file = tempDir.resolve("round.csv");
-        List<Student> original = List.of(
+        StudentList original = new StudentList(Arrays.asList(
                 student("ИУ7-32Б", 4.5, 123456),
                 student("ИУ7-31Б", 3.8, 100000),
                 student("ИУ7-33Б", 5.0, 999999)
-        );
+        ));
 
         FileService.appendStudents(original, file.toString());
-        List<Student> restored = FileService.readFromFile(file.toString());
+        StudentList restored = FileService.readFromFile(file.toString());
 
         assertEquals(original, restored);
     }
