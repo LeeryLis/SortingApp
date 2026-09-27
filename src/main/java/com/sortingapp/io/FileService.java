@@ -1,13 +1,16 @@
 package com.sortingapp.io;
 
+import com.sortingapp.collection.StudentList;
 import com.sortingapp.model.Student;
 import com.sortingapp.model.StudentBuilder;
 import com.sortingapp.model.StudentValidator;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.List;
@@ -21,12 +24,10 @@ public final class FileService {
 
     private FileService() {}
 
-    public static List<Student> readFromFile(String rawPath) {
-        requireValidPath(rawPath);
-
-        Path path = Path.of(rawPath);
+    public static StudentList readFromFile(String rawPath) throws FileNotFoundException {
+        Path path = toValidPath(rawPath);
         if (!Files.exists(path)) {
-            return List.of();
+            throw new FileNotFoundException("File not found: " + path);
         }
         if (!Files.isRegularFile(path)) {
             throw new FileFormatException("Not a regular file: " + rawPath);
@@ -40,7 +41,7 @@ public final class FileService {
         }
     }
 
-    public static void appendStudents(List<Student> students, String rawPath) {
+    public static void appendStudents(StudentList students, String rawPath) {
         if (students == null || students.isEmpty()) {
             return;
         }
@@ -53,13 +54,12 @@ public final class FileService {
     }
 
     public static void appendText(String text, String rawPath) {
-        requireValidPath(rawPath);
+        Path path = toValidPath(rawPath);
 
         if (text == null || text.isEmpty()) {
             return;
         }
 
-        Path path = Path.of(rawPath);
         try {
             Path parent = path.getParent();
             if (parent != null) {
@@ -77,17 +77,22 @@ public final class FileService {
         }
     }
 
-    private static void requireValidPath(String rawPath) {
+    private static Path toValidPath(String rawPath) {
         if (rawPath == null || rawPath.isBlank()) {
             throw new IllegalArgumentException("Path must not be null or blank");
         }
+        try {
+            return Path.of(rawPath).normalize();
+        } catch (InvalidPathException e) {
+            throw new IllegalArgumentException("Invalid path: " + rawPath, e);
+        }
     }
 
-    private static List<Student> parseAll(List<String> rawLines) {
+    private static StudentList parseAll(List<String> rawLines) {
         return IntStream.range(0, rawLines.size())
                 .filter(i -> !rawLines.get(i).isBlank())
                 .mapToObj(i -> parseLine(rawLines.get(i), i + 1))
-                .collect(Collectors.toList());
+                .collect(Collectors.toCollection(StudentList::new));
     }
 
     private static Student parseLine(String line, int lineNumber) {

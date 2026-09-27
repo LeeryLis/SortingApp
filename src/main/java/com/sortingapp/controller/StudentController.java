@@ -1,7 +1,9 @@
 package com.sortingapp.controller;
 
+import com.sortingapp.collection.StudentList;
+import com.sortingapp.io.ConsoleService;
+import com.sortingapp.io.FileFormatException;
 import com.sortingapp.io.FileService;
-import com.sortingapp.model.Student;
 import com.sortingapp.sort.SortService;
 import com.sortingapp.util.RandomFiller;
 import com.sortingapp.view.AlgorithmOptions;
@@ -9,19 +11,19 @@ import com.sortingapp.view.ConsoleView;
 import com.sortingapp.view.FieldOptions;
 import com.sortingapp.view.MenuOptions;
 
-import java.nio.file.Paths;
-import java.util.List;
+import java.io.FileNotFoundException;
+import java.io.UncheckedIOException;
 
 
 public class StudentController {
 
-    private List<Student> students;
+    private StudentList students;
     private final ConsoleView view;
     private final SortService sortService = new SortService();
 
     private boolean running = true;
 
-    public StudentController(List<Student> students, ConsoleView view) {
+    public StudentController(StudentList students, ConsoleView view) {
         this.students = students;
         this.view = view;
     }
@@ -51,27 +53,32 @@ public class StudentController {
     }
 
     private void loadFromFile() {
-        String path = view.askFilePath();
+        String path = view.askString("Введите путь к файлу: ");
         try {
-            students = FileService.readFromFile(Paths.get(path));
+            students = new StudentList(FileService.readFromFile(path));
             view.showSuccess("Загружено студентов: " + students.size());
             view.showStudents(students);
-        } catch (Exception e) {
+        } catch (FileNotFoundException e) {
             view.showError("Не удалось прочитать файл: " + e.getMessage());
-            //Это заглушка, тут нужен IOException, который нужно пробросить из FileService.readFromFile()
+        } catch (FileFormatException e) {
+            view.showError("Неверный формат: " + e.getMessage());
         }
     }
 
     private void manualInput() {
-        System.out.println("manualInput");
+        students = new StudentList(new ConsoleService(view).readAll());
     }
 
     private void randomFill() {
-        students = RandomFiller.generateStudents(view.askCount());
+        students = new StudentList(RandomFiller.generateStudents(view.askInt("Сколько студентов создать? ")));
     }
 
     private void saveToFile() {
-        System.out.println("saveToFile");
+        try {
+            FileService.appendStudents(students, view.askString("Введите имя файла: "));
+        } catch (UncheckedIOException e) {
+            view.showError(e.getMessage());
+        }
     }
 
     private void sort() {

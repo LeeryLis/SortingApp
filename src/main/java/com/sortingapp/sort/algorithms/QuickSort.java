@@ -1,23 +1,22 @@
 package com.sortingapp.sort.algorithms;
 
+import com.sortingapp.collection.StudentList;
 import com.sortingapp.model.Student;
 import com.sortingapp.sort.SortStrategy;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 
 public class QuickSort implements SortStrategy {
     @Override
-    public void sort(List<Student> students, Comparator<Student> comparator) {
+    public void sort(StudentList students, Comparator<Student> comparator) {
         int len = students.size();
         if (len <= 1) {
             return;
         }
         Student pivot = students.get(len / 2);
-        List<Student> less = new ArrayList<>();
-        List<Student> greater = new ArrayList<>();
-        List<Student> equal = new ArrayList<>();
+        StudentList less = new StudentList();
+        StudentList greater = new StudentList();
+        StudentList equal = new StudentList();
 
         for (Student student : students) {
             if (comparator.compare(student, pivot) < 0) {

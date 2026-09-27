@@ -1,14 +1,14 @@
 package com.sortingapp.sort.algorithms;
 
+import com.sortingapp.collection.StudentList;
 import com.sortingapp.model.Student;
 import com.sortingapp.sort.SortStrategy;
 
 import java.util.Comparator;
-import java.util.List;
 
 public class BubbleSort implements SortStrategy {
     @Override
-    public void sort(List<Student> students, Comparator<Student> comparator) {
+    public void sort(StudentList students, Comparator<Student> comparator) {
         int len = students.size();
         boolean needIteration = true;
         while (needIteration) {
