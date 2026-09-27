@@ -1,10 +1,11 @@
 package com.sortingapp.util;
 
+import com.sortingapp.collection.StudentList;
 import com.sortingapp.model.Student;
 import com.sortingapp.model.StudentConstraints;
 
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public final class RandomFiller {
@@ -14,13 +15,13 @@ public final class RandomFiller {
 
     private RandomFiller() {}
 
-    public static List<Student> generateStudents(int count) {
+    public static StudentList generateStudents(int count) {
         if (count < 0) {
             throw new IllegalArgumentException("count must be non-negative");
         }
         return IntStream.range(0, count)
                 .mapToObj(i -> randomStudent())
-                .toList();
+                .collect(Collectors.toCollection(() -> new StudentList(count)));
     }
 
     private static Student randomStudent() {

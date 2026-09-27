@@ -1,9 +1,9 @@
 package com.sortingapp.sort;
 
+import com.sortingapp.collection.StudentList;
 import com.sortingapp.model.Student;
 
 import java.util.Comparator;
-import java.util.List;
 
 public class SortContext {
 
@@ -24,7 +24,7 @@ public class SortContext {
         return strategy;
     }
 
-    public void sort(List<Student> students, Comparator<Student> comparator) {
+    public void sort(StudentList students, Comparator<Student> comparator) {
         if (students == null || students.size() < 2) {
             return;
         }

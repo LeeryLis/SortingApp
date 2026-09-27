@@ -1,14 +1,13 @@
 package com.sortingapp.sort.algorithms;
 
+import com.sortingapp.collection.StudentList;
 import com.sortingapp.model.Student;
 import com.sortingapp.model.comparator.StudentRecordBookComparator;
 import com.sortingapp.sort.SortStrategy;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -29,10 +28,10 @@ public class EvenOddRecordBookSortTest {
         Student s4 = Student.builder().groupNumber("А-1").averageScore(3.0).recordBookNumber(13).build(); // нечетный (на месте)
         Student s5 = Student.builder().groupNumber("А-1").averageScore(4.2).recordBookNumber(10).build(); // четный
 
-        List<Student> students = new ArrayList<>(Arrays.asList(s1, s2, s3, s4, s5));
+        StudentList students = new StudentList(Arrays.asList(s1, s2, s3, s4, s5));
 
         // Ожидаемый результат
-        List<Student> expectedStudents = new ArrayList<>(Arrays.asList(s5, s2, s1, s4, s3));
+        StudentList expectedStudents = new StudentList(Arrays.asList(s5, s2, s1, s4, s3));
 
         // Сортируем нашим алгоритмом
         sortStrategy.sort(students, comparator);

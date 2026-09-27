@@ -1,5 +1,6 @@
 package com.sortingapp.sort;
 
+import com.sortingapp.collection.StudentList;
 import com.sortingapp.model.Student;
 import com.sortingapp.model.comparator.StudentAverageScoreComparator;
 import com.sortingapp.model.comparator.StudentGroupNumberComparator;
@@ -12,11 +13,10 @@ import com.sortingapp.view.AlgorithmOptions;
 import com.sortingapp.view.FieldOptions;
 
 import java.util.Comparator;
-import java.util.List;
 
 public class SortService {
 
-    public void sort(List<Student> students, FieldOptions field, AlgorithmOptions algorithm, boolean evenOnly) {
+    public void sort(StudentList students, FieldOptions field, AlgorithmOptions algorithm, boolean evenOnly) {
         SortContext sortContext = new SortContext();
         Comparator<Student> comparator = toComparator(field);
         SortStrategy base = toStrategy(algorithm);
