@@ -17,7 +17,9 @@ public class StudentBuilder {
         if (!groupNumberSet || !averageScoreSet || !recordBookNumberSet) {
             throw new IllegalStateException( "All student parameters must be specified" );
         }
-        return new Student( groupNumber, averageScore, recordBookNumber );
+        Student student = new Student(groupNumber, averageScore, recordBookNumber);
+        StudentValidator.validate(student);
+        return student;
     }
 
     public StudentBuilder groupNumber(String groupNumber) {
