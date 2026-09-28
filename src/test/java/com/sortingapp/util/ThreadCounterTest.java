@@ -35,20 +35,20 @@ class ThreadCounterTest {
     @Test
     void testCountOccurrencesOfExactStudent() {
         Student target = student("732", 4.5, 123456);
-        long count = ThreadCounter.countOccurences(students, target);
+        long count = ThreadCounter.countOccurrences(students, target);
         assertEquals(2L, count, "Студент с такими полями должен встречаться 2 раза");
     }
 
     @Test
     void testCountOccurrencesOfMissingStudent() {
         Student target = student("999", 3.0, 999999);
-        long count = ThreadCounter.countOccurences(students, target);
+        long count = ThreadCounter.countOccurrences(students, target);
         assertEquals(0L, count, "Такого студента в списке нет");
     }
 
     @Test
     void testCountOccurrencesInEmptyCollection() {
-        long count = ThreadCounter.countOccurences(
+        long count = ThreadCounter.countOccurrences(
                 Collections.emptyList(), student("732", 4.5, 123456));
         assertEquals(0L, count, "В пустой коллекции вхождений 0");
     }
@@ -56,7 +56,7 @@ class ThreadCounterTest {
     @Test
     void testCountOccurrencesOfSingleElementMatch() {
         Student target = student("732", 4.5, 123456);
-        long count = ThreadCounter.countOccurences(
+        long count = ThreadCounter.countOccurrences(
                 Collections.singletonList(target), target);
         assertEquals(1L, count, "В единственном элементе совпадение должно возвращать 1");
     }
@@ -70,7 +70,7 @@ class ThreadCounterTest {
 
         Student target = student("732", 4.5, 123456);
 
-        long count = ThreadCounter.countOccurences(largeCollection, target);
+        long count = ThreadCounter.countOccurrences(largeCollection, target);
         assertEquals(5000L, count, "Должно быть ровно 5000 вхождений в многопоточном режиме");
     }
 
@@ -83,7 +83,7 @@ class ThreadCounterTest {
         almostMatchingStudents.add(student("731", 4.5, 123456));
         almostMatchingStudents.add(target);
 
-        long count = ThreadCounter.countOccurences(almostMatchingStudents, target);
+        long count = ThreadCounter.countOccurrences(almostMatchingStudents, target);
         assertEquals(1L, count, "Должно учитываться только полное совпадение материальных полей");
     }
 }
