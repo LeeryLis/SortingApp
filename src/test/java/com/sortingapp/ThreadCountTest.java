@@ -89,9 +89,9 @@ class ThreadCounterTest {
 
 
         List<Student> almostMatchingStudents = new ArrayList<>();
-        almostMatchingStudents.add(new Student("732", 4.5, 123457)); // Разная зачетная книжка
-        almostMatchingStudents.add(new Student("731", 4.5, 123456)); // Разная группа
-        almostMatchingStudents.add(target); // Один полный подходящий
+        almostMatchingStudents.add(new Student("732", 4.5, 123457));
+        almostMatchingStudents.add(new Student("731", 4.5, 123456));
+        almostMatchingStudents.add(target);
 
         long count = ThreadCounter.countOccurences(almostMatchingStudents, target);
         assertEquals(1L, count, "Должно учитываться только полное совпадение материальных полей");
