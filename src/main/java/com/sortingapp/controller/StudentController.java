@@ -55,9 +55,11 @@ public class StudentController {
     private void loadFromFile() {
         String path = view.askString("Введите путь к файлу: ");
         try {
+            if(confirmOverwrite()) {
             students = new StudentList(FileService.readFromFile(path));
             view.showSuccess("Загружено студентов: " + students.size());
             view.showStudents(students);
+            }
         } catch (FileNotFoundException e) {
             view.showError("Не удалось прочитать файл: " + e.getMessage());
         } catch (FileFormatException e) {
@@ -66,18 +68,18 @@ public class StudentController {
     }
 
     private void manualInput() {
-        students = new StudentList(new ConsoleService(view).readAll());
+        if(confirmOverwrite()) {
+            students = new StudentList(new ConsoleService(view).readAll());
+            view.showSuccess("Загружено студентов: " + students.size());
+            view.showStudents(students);
+        }
     }
 
     private void randomFill() {
+        if(confirmOverwrite()) {
         students = new StudentList(RandomFiller.generateStudents(view.askInt("Сколько студентов создать? ")));
-    }
-
-    private void saveToFile() {
-        try {
-            FileService.appendStudents(students, view.askString("Введите имя файла: "));
-        } catch (UncheckedIOException e) {
-            view.showError(e.getMessage());
+            view.showSuccess("Загружено студентов: " + students.size());
+            view.showStudents(students);
         }
     }
 
@@ -97,6 +99,21 @@ public class StudentController {
 
         sortService.sort(students, field, algorithm, evenOnly);
         view.showStudents(students);
+    }
+
+    private void saveToFile() {
+        try {
+            FileService.appendStudents(students, view.askString("Введите имя файла: "));
+        } catch (UncheckedIOException e) {
+            view.showError(e.getMessage());
+        }
+    }
+
+    private boolean confirmOverwrite() {
+        if (students == null || students.isEmpty()) {
+            return true;
+        }
+        return view.confirmAction("Список не пуст. Перезаписать данные?");
     }
 
     private void exit() {
