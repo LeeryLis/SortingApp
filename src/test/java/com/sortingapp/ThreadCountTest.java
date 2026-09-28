@@ -1,76 +1,99 @@
 
 
 package com.sortingapp;
-import com.sortingapp.util.ThreadCounter;
 
+
+
+
+import com.sortingapp.model.Student;
+import com.sortingapp.util.ThreadCounter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ThreadCounterTest {
 
-    private List<Integer> groups;
-    private List<Double> scores;
-    private List<Integer> recordBooks;
+     List<Student> students;
 
     @BeforeEach
     void setUp() {
-        // Инициализация списков
-        groups = new ArrayList<>();
-        groups.add(732);
-        groups.add(732);
-        groups.add(731);
-        groups.add(732);
-
-        scores = new ArrayList<>();
-        scores.add(4.5);
-        scores.add(4.8);
-        scores.add(5.0);
-        scores.add(3.7);
-
-        recordBooks = new ArrayList<>();
-        recordBooks.add(123456);
-        recordBooks.add(123457);
-        recordBooks.add(123458);
-        recordBooks.add(123456);
+        students = new ArrayList<>();
+        students.add(new Student("732", 4.5, 123456));
+        students.add(new Student("732", 4.8, 123457));
+        students.add(new Student("731", 5.0, 123458));
+        students.add(new Student("732", 4.5, 123456));
     }
 
     @Test
-    void testCountOccurrencesByRecordBook() {
-        int targetRecordBook = 123456;
-        long count = ThreadCounter.countOccurences(recordBooks, targetRecordBook);
-        assertEquals(2, count, "Количество вхождений зачетной книжки 123456 должно быть 2");
+    void testCountOccurrencesOfExactStudent() {
+        Student target = new Student("732", 4.5, 123456);
+        long count = ThreadCounter.countOccurences(students, target);
+        assertEquals(2L, count, "Студент с такими полями должен встречаться 2 раза");
     }
 
     @Test
-    void testCountOccurrencesByGroup() {
-        int targetGroup = 732;
-        long count = ThreadCounter.countOccurences(groups, targetGroup);
-        assertEquals(3, count, "Количество студентов в группе 732 должно быть 3");
-    }
-
-    @Test
-    void testCountOccurrencesByAverageScore() {
-        double targetScore = 4.5;
-        long count = ThreadCounter.countOccurences(scores, targetScore); // Метод для среднего балла
-        assertEquals(1, count, "Количество студентов с баллом 4.5 должно быть 1");
-    }
-
-    @Test
-    void testCountOccurrencesByNullValue() {
-        long count = ThreadCounter.countOccurences(scores, null);
-        assertEquals(0, count, "Количество вхождений null должно быть 0"); // Ожидаем 0
+    void testCountOccurrencesOfMissingStudent() {
+        Student target = new Student("999", 3.0, 999999);
+        long count = ThreadCounter.countOccurences(students, target);
+        assertEquals(0L, count, "Такого студента в списке нет");
     }
 
     @Test
     void testCountOccurrencesInEmptyCollection() {
-        List<Integer> emptyList = Collections.emptyList();
-        long count = ThreadCounter.countOccurences(emptyList, 123456);
-        assertEquals(0, count, "Количество вхождений в пустой коллекции должно быть 0");
+
+        long count = ThreadCounter.countOccurences(Collections.emptyList(), new Student("732", 4.5, 123456));
+        assertEquals(0L, count, "В пустой коллекции вхождений 0");
+    }
+
+    @Test
+    void testCountOccurrencesOfSingleElementMatch() {
+
+        Student target = new Student("732", 4.5, 123456);
+        long count = ThreadCounter.countOccurences(Collections.singletonList(target), target);
+        assertEquals(1L, count, "В единственном элементе совпадение должно возвращать 1");
+    }
+
+    @Test
+    void testCountOccurrencesInLargeCollection() throws InterruptedException {
+
+        List<Student> largeCollection = new ArrayList<>(10_000);
+        IntStream.range(0, 10_000).forEach(i -> {
+            largeCollection.add(new Student(i % 2 == 0 ? "732" : "731",
+                    i % 2 == 0 ? 4.5 : 3.7,
+                    i % 2 == 0 ? 123456 : 123457));
+        });
+
+
+        Student target = new Student("732", 4.5, 123456);
+        largeCollection.add(target);
+        largeCollection.add(target);
+
+
+        long count = ThreadCounter.countOccurences(largeCollection, target);
+        assertEquals(5000L, count, "Число 732 с оценкой 4.5 и номером зачётки 123456 должно встретиться 5000 раз");
+    }
+
+    @Test
+    void testCountOccurrencesWithAlmostMatchingData() {
+
+        Student target = new Student("732", 4.5, 123456);
+
+
+        List<Student> almostMatchingStudents = new ArrayList<>();
+        almostMatchingStudents.add(new Student("732", 4.5, 123457)); // Разная зачетная книжка
+        almostMatchingStudents.add(new Student("731", 4.5, 123456)); // Разная группа
+        almostMatchingStudents.add(target); // Один полный подходящий
+
+        long count = ThreadCounter.countOccurences(almostMatchingStudents, target);
+        assertEquals(1L, count, "Должно учитываться только полное совпадение материальных полей");
     }
 }
