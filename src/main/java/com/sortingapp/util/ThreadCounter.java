@@ -1,5 +1,6 @@
 package com.sortingapp.util;
 
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -20,12 +21,15 @@ public final class ThreadCounter {
     Количество потоков определяется по числу доступных ядер процессор.
 
      @param collection коллекция для поиска
-     @param target искомый элемент (N)
+     @param target искомый элемент (N);
      @return количество вхождений
+
      */
-    public static <T> long count0ccurences(Collection<T> collection, T target) {
-        if (collection == null || collection.isEmpty()) {
-            System.out.println(" Коллекция пуста. Вхождений 0");
+
+
+
+    public static <T> long countOccurences(List<T> collection, T target) {
+        if (collection == null || collection.isEmpty()){
             return 0;
 
         }
@@ -60,17 +64,21 @@ public final class ThreadCounter {
             for (Future<Long> future : futures) {
                 try {
                     total += future.get();
-                } catch (InterruptedException | ExecutionException ex) {
+                } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
-                    throw new RuntimeException("Ошибка при подсчете : ", ex);
+                    throw new RuntimeException("Прервано", ex);
+                } catch (ExecutionException ex) {
+                    throw new RuntimeException("Ошибка при подсчете", ex);
                 }
             }
-            executor.shutdown();
-            System.out.println("Количество вхождений элемента " + target + " : " + total);
-            return total;
+               return total;
         }finally {
             executor.shutdown();
         }
 
     }
+
+
+
 }
+
