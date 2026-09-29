@@ -7,7 +7,6 @@ import com.sortingapp.view.ConsoleView;
 
 public class ConsoleService {
     ConsoleView view;
-    StudentList students = new StudentList();
 
     public ConsoleService(ConsoleView view) {
         this.view = view;
@@ -28,19 +27,18 @@ public class ConsoleService {
         return result;
     }
 
-    private Student readOne() {
+    public Student readOne() {
         view.showMessage("--- Ввод студента ---");
 
-        String group      = view.askString("Номер группы: ").trim();
-        double score      = view.askDouble("Средняя оценка (2..5): ");
-        int recordBook    = view.askInt("Номер зачётной книжки: ");
+        String group = view.askString("Номер группы: ").trim();
+        double score = view.askDouble("Средняя оценка (2..5): ");
+        int recordBook = view.askInt("Номер зачётной книжки: ");
 
         try {
-            StudentBuilder builder = new StudentBuilder();
-            builder.groupNumber(group)
+            return new StudentBuilder().groupNumber(group)
                     .averageScore(score)
-                    .recordBookNumber(recordBook);
-            return  builder.build();
+                    .recordBookNumber(recordBook)
+                    .build();
         } catch (IllegalArgumentException e) {
             view.showError("Данные некорректны: " + e.getMessage());
             return null;

@@ -13,10 +13,6 @@ public enum AlgorithmOptions {
         this.description = description;
     }
 
-    public int getCode() {
-        return code;
-    }
-
     public String getDescription() {
         return description;
     }

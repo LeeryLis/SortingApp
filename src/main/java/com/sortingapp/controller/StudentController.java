@@ -4,8 +4,10 @@ import com.sortingapp.collection.StudentList;
 import com.sortingapp.io.ConsoleService;
 import com.sortingapp.io.FileFormatException;
 import com.sortingapp.io.FileService;
+import com.sortingapp.model.Student;
 import com.sortingapp.sort.SortService;
 import com.sortingapp.util.RandomFiller;
+import com.sortingapp.util.ThreadCounter;
 import com.sortingapp.view.AlgorithmOptions;
 import com.sortingapp.view.ConsoleView;
 import com.sortingapp.view.FieldOptions;
@@ -20,12 +22,14 @@ public class StudentController {
     private StudentList students;
     private final ConsoleView view;
     private final SortService sortService = new SortService();
+    private final ConsoleService consoleService;
 
     private boolean running = true;
 
     public StudentController(StudentList students, ConsoleView view) {
         this.students = students;
         this.view = view;
+        this.consoleService = new ConsoleService(view);
     }
 
     public void run() {
@@ -48,6 +52,7 @@ public class StudentController {
             case SORT -> sort();
             case SAVE_TO_FILE -> saveToFile();
             case SHOW_ALL -> view.showStudents(students);
+            case SEARCH -> searchCount();
             case EXIT -> exit();
         }
     }
@@ -55,9 +60,11 @@ public class StudentController {
     private void loadFromFile() {
         String path = view.askString("Введите путь к файлу: ");
         try {
-            students = new StudentList(FileService.readFromFile(path));
-            view.showSuccess("Загружено студентов: " + students.size());
-            view.showStudents(students);
+            if (confirmOverwrite()) {
+                students = new StudentList(FileService.readFromFile(path));
+                view.showSuccess("Загружено студентов: " + students.size());
+                view.showStudents(students);
+            }
         } catch (FileNotFoundException e) {
             view.showError("Не удалось прочитать файл: " + e.getMessage());
         } catch (FileFormatException e) {
@@ -66,18 +73,18 @@ public class StudentController {
     }
 
     private void manualInput() {
-        students = new StudentList(new ConsoleService(view).readAll());
+        if (confirmOverwrite()) {
+            students = new StudentList(consoleService.readAll());
+            view.showSuccess("Загружено студентов: " + students.size());
+            view.showStudents(students);
+        }
     }
 
     private void randomFill() {
-        students = new StudentList(RandomFiller.generateStudents(view.askInt("Сколько студентов создать? ")));
-    }
-
-    private void saveToFile() {
-        try {
-            FileService.appendStudents(students, view.askString("Введите имя файла: "));
-        } catch (UncheckedIOException e) {
-            view.showError(e.getMessage());
+        if (confirmOverwrite()) {
+            students = new StudentList(RandomFiller.generateStudents(view.askInt("Сколько студентов создать? ")));
+            view.showSuccess("Загружено студентов: " + students.size());
+            view.showStudents(students);
         }
     }
 
@@ -96,7 +103,35 @@ public class StudentController {
         }
 
         sortService.sort(students, field, algorithm, evenOnly);
+
+        view.showMessage("Отсортировано по полю: " + field.getDescription());
+        view.showMessage(algorithm.getDescription());
         view.showStudents(students);
+    }
+
+    private void saveToFile() {
+        try {
+            FileService.appendStudents(students, view.askString("Введите имя файла: "));
+        } catch (UncheckedIOException e) {
+            view.showError(e.getMessage());
+        }
+    }
+
+    private void searchCount() {
+        if (students == null || students.isEmpty()) {
+            view.showMessage("Список пуст!");
+        } else {
+            Student student = consoleService.readOne();
+            System.out.println("Количество вхождений в список по заданным параметрам: "
+                    + ThreadCounter.countOccurrences(students, student) + ".");
+        }
+    }
+
+    private boolean confirmOverwrite() {
+        if (students == null || students.isEmpty()) {
+            return true;
+        }
+        return view.confirmAction("Список не пуст. Перезаписать данные?");
     }
 
     private void exit() {

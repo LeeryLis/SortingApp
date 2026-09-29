@@ -2,7 +2,6 @@ package com.sortingapp.util;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.*;
 
@@ -17,7 +16,7 @@ public final class ThreadCounter {
     }
 
     /*
-    Много поточный подчет вхождений элемента target в коллекцию.
+    Много поточный подсчет вхождений элемента target в коллекцию.
     Количество потоков определяется по числу доступных ядер процессор.
 
      @param collection коллекция для поиска
@@ -27,9 +26,8 @@ public final class ThreadCounter {
      */
 
 
-
-    public static <T> long countOccurences(List<T> collection, T target) {
-        if (collection == null || collection.isEmpty()){
+    public static <T> long countOccurrences(List<T> collection, T target) {
+        if (collection == null || collection.isEmpty()) {
             return 0;
 
         }
@@ -41,7 +39,7 @@ public final class ThreadCounter {
 
         ExecutorService executor = Executors.newFixedThreadPool(threadCount);
         List<Future<Long>> futures = new ArrayList<>();
-        try{
+        try {
             for (int start = 0; start < size; start += chunkSize) {
 
                 final int s = start;
@@ -71,14 +69,10 @@ public final class ThreadCounter {
                     throw new RuntimeException("Ошибка при подсчете", ex);
                 }
             }
-               return total;
-        }finally {
+            return total;
+        } finally {
             executor.shutdown();
         }
 
     }
-
-
-
 }
-

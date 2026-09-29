@@ -8,6 +8,7 @@ public enum MenuOptions {
     SORT(4, "Отсортировать список"),
     SAVE_TO_FILE(5, "Сохранить список в файл"),
     SHOW_ALL(6, "Показать текущий список"),
+    SEARCH(7, "Найти"),
     EXIT(0, "Выход");
 
     private final int code;
@@ -16,14 +17,6 @@ public enum MenuOptions {
     MenuOptions(int code, String description) {
         this.code = code;
         this.description = description;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public String getDescription() {
-        return description;
     }
 
     public static MenuOptions fromCode(int code) {
