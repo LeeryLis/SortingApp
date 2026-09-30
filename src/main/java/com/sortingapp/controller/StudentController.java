@@ -128,7 +128,7 @@ public class StudentController {
         view.showMessage("| Группа     | Ср. оценка     | Номер зачётки    |");
         view.showMessage("+------------+----------------+------------------+");
         for (Student s : students) {
-            view.showMessage(String.format("| %-10s | %-14.2f | %-16d |%n",
+            view.showMessage(String.format("| %-10s | %-14.2f | %-16d |",
                     s.getGroupNumber(),
                     s.getAverageScore(),
                     s.getRecordBookNumber()));
