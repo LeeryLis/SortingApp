@@ -51,7 +51,7 @@ public class StudentController {
             case RANDOM_FILL -> randomFill();
             case SORT -> sort();
             case SAVE_TO_FILE -> saveToFile();
-            case SHOW_ALL -> view.showStudents(students);
+            case SHOW_ALL -> showStudents();
             case SEARCH -> searchCount();
             case EXIT -> exit();
         }
@@ -63,7 +63,7 @@ public class StudentController {
             if (confirmOverwrite()) {
                 students = new StudentList(FileService.readFromFile(path));
                 view.showSuccess("Загружено студентов: " + students.size());
-                view.showStudents(students);
+                showStudents();
             }
         } catch (FileNotFoundException e) {
             view.showError("Не удалось прочитать файл: " + e.getMessage());
@@ -76,7 +76,7 @@ public class StudentController {
         if (confirmOverwrite()) {
             students = new StudentList(consoleService.readAll());
             view.showSuccess("Загружено студентов: " + students.size());
-            view.showStudents(students);
+            showStudents();
         }
     }
 
@@ -84,7 +84,7 @@ public class StudentController {
         if (confirmOverwrite()) {
             students = new StudentList(RandomFiller.generateStudents(view.askInt("Сколько студентов создать? ")));
             view.showSuccess("Загружено студентов: " + students.size());
-            view.showStudents(students);
+            showStudents();
         }
     }
 
@@ -106,7 +106,7 @@ public class StudentController {
 
         view.showMessage("Отсортировано по полю: " + field.getDescription());
         view.showMessage(algorithm.getDescription());
-        view.showStudents(students);
+        showStudents();
     }
 
     private void saveToFile() {
@@ -117,12 +117,32 @@ public class StudentController {
         }
     }
 
+    public void showStudents() {
+        System.out.println();
+        if (students == null || students.isEmpty()) {
+            view.showMessage("Список пуст.");
+            return;
+        }
+
+        view.showMessage("+------------+----------------+------------------+");
+        view.showMessage("| Группа     | Ср. оценка     | Номер зачётки    |");
+        view.showMessage("+------------+----------------+------------------+");
+        for (Student s : students) {
+            view.showMessage(String.format("| %-10s | %-14.2f | %-16d |%n",
+                    s.getGroupNumber(),
+                    s.getAverageScore(),
+                    s.getRecordBookNumber()));
+        }
+        view.showMessage("+------------+----------------+------------------+");
+        view.showMessage("Всего: " + students.size());
+    }
+
     private void searchCount() {
         if (students == null || students.isEmpty()) {
             view.showMessage("Список пуст!");
         } else {
             Student student = consoleService.readOne();
-            System.out.println("Количество вхождений в список по заданным параметрам: "
+            view.showMessage("Количество вхождений в список по заданным параметрам: "
                     + ThreadCounter.countOccurrences(students, student) + ".");
         }
     }

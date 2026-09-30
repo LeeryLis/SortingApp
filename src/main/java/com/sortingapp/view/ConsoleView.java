@@ -1,8 +1,5 @@
 package com.sortingapp.view;
 
-import com.sortingapp.model.Student;
-
-import java.util.List;
 import java.util.Scanner;
 
 public class ConsoleView {
@@ -82,26 +79,6 @@ public class ConsoleView {
         String input = askString("(y/n): ").toLowerCase();
 
         return input.equals("y") || input.equals("д") || input.equals("yes");
-    }
-
-    public void showStudents(List<Student> students) {
-        System.out.println();
-        if (students == null || students.isEmpty()) {
-            showMessage("Список пуст.");
-            return;
-        }
-
-        showMessage("+------------+----------------+------------------+");
-        showMessage("| Группа     | Ср. оценка     | Номер зачётки    |");
-        showMessage("+------------+----------------+------------------+");
-        for (Student s : students) {
-            System.out.printf("| %-10s | %-14.2f | %-16d |%n",
-                    s.getGroupNumber(),
-                    s.getAverageScore(),
-                    s.getRecordBookNumber());
-        }
-        showMessage("+------------+----------------+------------------+");
-        System.out.printf("Всего: %d%n", students.size());
     }
 
     public void showMessage(String message) {
